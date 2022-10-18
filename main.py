@@ -11,6 +11,7 @@ problem = '000|300|060\n' \
           '000|050|400\n' \
 
 
+
 class SudokuElement:
     """
     123|456|789
@@ -55,6 +56,7 @@ def sudoku_string_to_sudoku_logic(sudoku_string):
         sudoku_logic.append(SudokuElement(int(element), 1, 1, 11))
     return sudoku_logic
 
+
 def retrieve_digits_from_string(string):
     result = ''
 
@@ -65,7 +67,7 @@ def retrieve_digits_from_string(string):
     return result
 
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     print(problem)
     dupa = SudokuElement(1, 1, 1, 11)
     print(dupa)

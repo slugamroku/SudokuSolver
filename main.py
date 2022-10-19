@@ -11,6 +11,7 @@ problem = '000|300|060\n' \
           '000|050|400\n' \
 
 
+
 class SudokuElement:
     """
     123|456|789
@@ -27,23 +28,27 @@ class SudokuElement:
 
     11|12|13
     --|--|--
-    12|22|23
+    21|22|23
     --|--|--
-    13|23|33
+    31|32|33
     """
 
-    def __init__(self, solution, row, column, zone):
+    def __init__(self, solution, row, column):
         self.solution = solution
         if self.solution < 0 or self.solution > 9:
-            raise ValueError('Sudoku elements must take value between 1 and 9 or 0 for uknnown value')
-        self.solved = False if self.solution == 0 else True
+            raise ValueError('Sudoku elements must take value between 1 and 9 or 0 for unknown value')
+        self.solved = False
+        self.check_if_solved()
         self.row = row
         self.column = column
-        self.zone = zone
+        self.zone = (-(self.row // -3) * 10) + -(self.column // -3)
         self.possible_values = set() if self.solved is True else set(range(1, 10))
 
     def __str__(self):
-        return 'Value at ' + ' is ' + str(self.solution)
+        return 'Value at row ' + str(self.row) + ' column ' + str(self.column) + ' zone ' + str(self.zone) + ' is ' + str(self.solution)
+
+    def check_if_solved(self):
+        self.solved = False if self.solution == 0 else True
 
 
 def sudoku_string_to_sudoku_logic(sudoku_string):
@@ -51,9 +56,13 @@ def sudoku_string_to_sudoku_logic(sudoku_string):
     if len(sudoku_string) != 81:
         raise Exception('Unexpected number of elements in problem - should be 81')
     sudoku_logic = list()
-    for element in sudoku_string:
-        sudoku_logic.append(SudokuElement(int(element), 1, 1, 11))
+    for index, element in enumerate(sudoku_string):
+        row = (index // 9) + 1
+        column = (index % 9) + 1
+        sudoku_logic.append(SudokuElement(int(element), row, column))
+        #print(sudoku_logic[index])
     return sudoku_logic
+
 
 def retrieve_digits_from_string(string):
     result = ''
@@ -65,10 +74,10 @@ def retrieve_digits_from_string(string):
     return result
 
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     print(problem)
-    dupa = SudokuElement(1, 1, 1, 11)
-    print(dupa)
+    # example = SudokuElement(0, 1, 1)
+    # print(example)
     sudoku_list = sudoku_string_to_sudoku_logic(problem)
 
-# dopisać test
+# write some tests
